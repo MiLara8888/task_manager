@@ -1,0 +1,22 @@
+{% extends 'shed/base.html' %}
+
+{% block main %}
+
+
+<form action="{% url 'shedm:task_update' pk2=pk2 pk=pk %}" method="post">
+    {% csrf_token %}
+    <div class='form-error'>{{ form.non_field_errors }}</div>
+    {% for f in form %}
+    <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}: </label>{{ f }}</p>
+    <div class="form-error">{{ f.errors }}</div>
+    {% endfor %}
+    <input type="submit" name = "update" value="Сохранить">
+    </form>
+    <br>
+    <form action="{% url 'shedm:task_delete' pk=pk pk2=pk2 %}" method="post">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-outline-danger" name="delete" value="Удалить">
+    </form>
+</form>
+
+{% endblock main %}

@@ -1,0 +1,88 @@
+{% extends 'shed/base.html' %}
+
+{% block main %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">{{ proj_name }}</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            {% comment %} <select class="form-select form-select-sm" aria-label=".form-select-sm пример">
+                <option selected>Выберите пользователя</option>
+                <option value="1">Один</option>
+                <option value="2">Два</option>
+                <option value="3">Три</option>
+            </select> {% endcomment %}
+            <div class="btn-group me-2">
+                <a class="btn btn-sm btn-outline-secondary" href="{% url 'shedm:project_detail' pk=pk %}" role="button">Информация о проекте</a>
+                <a class="btn btn-sm btn-outline-secondary" href="{% url 'shedm:add_task' pk=pk %}" role="button">Добавить задачу</a>
+
+
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown" aria-expanded="false">
+                    Выбрать пользователя
+                </button>
+                <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'shedm:all_task_project' pk=pk %}">Все пользователи</a></li>
+                        {% for i in users %}
+                        <li><a class="dropdown-item" href="{% url 'shedm:filter_user' pk2=i.user_id pk=pk %}">{{ i.username }}</a></li>
+                        {% endfor %}
+                </ul>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="row align-items-start">
+            <div class="col">
+                Создана
+                <div>
+                    {% for i in execution %}
+                    <br>
+                    <a href="{% url 'shedm:task_info' pk2=pk pk=i.id %}" class="link-secondary">{{ i.name }}</a><br>
+                    {{ i.username }} {% include "shed/task/update_state.html" with pk=i.id pk2=i.proj_id %}<br>
+                    {{ i.task_period }}<br>
+                    <hr>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col">
+                Задачи в работе
+                <div>
+                    {% for i in inwork %}
+                    <br>
+                    <a href="{% url 'shedm:task_info' pk2=pk pk=i.id %}" class="link-secondary">{{ i.name }}</a><br>
+                    {{ i.username }} {% include "shed/task/update_state.html" with pk=i.id pk2=i.proj_id %}<br>
+                    {{ i.task_period }}<br>
+                    <hr>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col">
+                Закончена
+                <div>
+                    {% for i in finished %}
+                    <br>
+                    <a href="{% url 'shedm:task_info' pk2=pk pk=i.id %}" class="link-secondary">{{ i.name }}</a><br>
+                    {{ i.username }} {% include "shed/task/update_state.html" with pk=i.id pk2=i.proj_id %}<br>
+                    {{ i.task_period }}<br>
+                    <hr>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col">
+                Заморожена
+                <div>
+                    {% for i in frozen %}
+                    <br>
+                    <a href="{% url 'shedm:task_info' pk2=pk pk=i.id %}" class="link-secondary">{{ i.name }}</a><br>
+                    {{ i.username }} {% include "shed/task/update_state.html" with pk=i.id pk2=i.proj_id %}<br>
+                    {{ i.task_period }}<br>
+                    <hr>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'shed/base.html' %}
+
+{% block main %}
+
+<main>
+<div class='container'>
+
+<h3>{{ project.name }}</h3>
+<hr>
+
+{% if project.description %}
+<h6>Описание</h6>
+{{ project.description }}
+{% else %}
+<p>Пока нет описания проекта</p>
+<a href="{% url "shedm:project_update" pk=project.id %}">Изменить</a>
+{% endif %}
+<hr>
+
+{% if user_list %}
+<h6>Участники проекта</h6>
+{% for user in user_list %}
+<br>
+{{ user }}
+{% endfor %}
+<hr>
+{% endif %}
+
+<h6>статус исполнения</h6>
+<p>{{ state }}</p>
+<hr>
+
+<h6>Создан</h6>
+{{ project.time_create }}
+
+{% if project.d_start %}
+<hr>
+<p>Начало работы над проектом: {{ start }}</p>
+    {% if project.d_end %}
+        <p>Конец работы  над проектом: {{ end }}</p>
+    {% endif %}
+{% endif %}
+<hr>
+<h6>
+
+время работы над проектом
+</h6>
+{% if period %}
+    <p>Проект закончен за {{ period }} дней</p>
+{% elif counting %}
+    <p>Работа над проектом продолжается {{ counting }} дней</p>
+{% else %}
+    <p>Проект не в разработке</p>
+{% endif %}
+
+<hr>
+
+{% if project.completion_date %}
+<h6>Срок окончания проекта</h6>
+    {{ completion_date }}
+<hr>
+{% endif %}
+
+<h6>Всего в проекте {{ project.cnt }} задач</h6>
+
+<hr>
+
+<a class="btn btn-sm btn-outline-secondary" href="{% url 'shedm:project_update' pk=project.id %}" role="button">Изменить</a>
+
+</div>
+
+</main>
+
+{% endblock main %}

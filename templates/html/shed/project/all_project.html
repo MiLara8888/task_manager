@@ -1,0 +1,64 @@
+{% extends 'shed/base.html' %}
+
+{% block main %}
+
+<main>
+<section class="py-5 text-center container">
+    <div class="row py-lg-3">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light">Все проекты</h1>
+        </div>
+    </div>
+</section>
+<div class="album py-5 bg-light">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {% for project in projects %}
+        <div class="col">
+            <div class="card shadow-sm">
+            {% comment %} <div class="card-header text-muted">
+                    <p>в работе н, заморожено н, закончено н, содано н</p>
+            </div> {% endcomment %}
+            <div class="card-body">
+                <h5 class="card-title">{{ project.name }}</h5>
+                {% autoescape on %}
+                {% if project.description %}
+                <p class="card-text">{{ project.description|linebreaks|truncatewords:10 }}</p>
+                {% else %}
+                <p class="card-text">У этого проекта пока нет описания</p>
+                {% endif %}
+                {% endautoescape %}
+                <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group-vertical" role="group" aria-label="Вертикальная группа кнопок">
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ project.get_absolute_url }}" role="button">Инфо</a>
+                        <a class="btn btn-sm btn-outline-secondary" href="{% url 'shedm:all_task_project' pk=project.id %}" role="button">Задачи</a>
+                </div>
+                <div class="btn-group-vertical" role="group" aria-label="Вертикальная группа кнопок">
+                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'shedm:project_update' pk=project.id %}" role="button">Изменить</a>
+                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'shedm:comment_proj' pk=project.id %}" role="button">Комментарии</a>
+                </div>
+                {% comment %} <div class="btn-group">
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ project.get_absolute_url }}" role="button">Инфо</a>
+                    <a class="btn btn-sm btn-outline-secondary" href="#" role="button">Задачи</a>
+                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'shedm:project_update' pk=project.id %}" role="button">Изменить</a>
+                    <a class="btn btn-sm btn-outline-secondary" href="#" role="button">Комментарии</a>
+                </div> {% endcomment %}
+                <small class="text-muted">Статус: {{ project.get_state_display }}</small>
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                {% if project.completion_date or project.d_start or project.d_end %}
+                    <p> {{ project.project_period }} </p>
+                {% else %}
+                    <p> Проект создан </p>
+                {% endif %}
+            </div>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+</main>
+
+{% endblock main %}

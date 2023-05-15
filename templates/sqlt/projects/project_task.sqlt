@@ -1,0 +1,13 @@
+{% extends 'sqlt/core/base.sqlt' %}
+{% block script_body %}
+    SELECT  p.name AS proj_name, p.id AS proj_id, t.*, u.USERNAME
+    FROM SHEDM.SHED_PROJECT p
+    LEFT JOIN SHEDM.SHED_TASK t
+    ON t.PROJECT_ID = p.ID
+    LEFT JOIN SHEDM.AUTH_USER u
+    ON t.EXECUTOR_ID = u.ID
+    WHERE p.ID = %(project_id)s
+    {% if user_id %}
+        AND t.EXECUTOR_ID=%(user_id)s
+    {% endif %}
+{% endblock script_body %}

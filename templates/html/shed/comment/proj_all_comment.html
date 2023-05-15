@@ -1,0 +1,80 @@
+{% extends 'shed/base.html' %}
+
+{% block main %}
+{% comment %} <div class="container">
+    <h1>{{ proj }}</h1>
+<ul class="list-group">
+    {% for i in object_list %}
+    <li class="list-group-item">{{ i.username }}______{{ i.text }}</li>
+            {% for j in object_list %}
+
+                {% if j.comment_id == i.id %}
+                <div class="container">
+                    {{ j.username }}______{{ j.text }}
+                </div>
+                {% endif %}
+            {% endfor %}
+    {% endfor %}
+
+</ul>
+</div> {% endcomment %}
+
+
+<div class="container">
+    <h1>{{ proj }}</h1>
+    <div class="dropdown">
+        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+            Написать комментарий
+        </button>
+        <form action="{% url 'shedm:add_comment' pk=proj_id %}" class="dropdown-menu p-4" method="post" >
+            {% csrf_token %}
+            <div class="mb-3">
+                <div class='form-error'>{{ form.non_field_errors }}</div>
+                <p>
+                    <label for="{{ text }}">Комментарий: </label>
+                    <input id="text" class="form_input" type="text" name="text" required="">
+                </p>
+            </div>
+        <button type="submit" class="btn btn-outline-secondary">Опубликовать</button>
+        </form>
+    </div>
+    <hr>
+    <ul class="list-group">
+        {% for i in comment %}
+            <li class="list-group-item list-group-item-warning">{{ i.username }}<br>{{ i.text }}<br>{{ i.time_create }}
+            <div class="dropdown">
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                    Ответить
+                </button>
+            <form action="{% url 'shedm:add_comment_bound' pk=proj_id pk2=i.id %}" class="dropdown-menu p-4" method="post" >
+                {% csrf_token %}
+                <div class="mb-3">
+                    <div class='form-error'>{{ form.non_field_errors }}</div>
+                    <p>
+                        <label for="{{ text }}">Комментарий: </label>
+                        <input id="text" class="form_input" type="text" name="text" required="">
+                    </p>
+                </div>
+                <button type="submit" class="btn btn-outline-secondary">Ответить</button>
+            </form>
+            <form action="{% url 'shedm:comment_delete' pk2=proj_id pk=i.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" class="btn-close" name="delete" value="">
+            </form>
+            </div>
+            </li>
+                {% for j in bount_comment %}
+                    {% if j.comment_id == i.id %}
+                        <li class="list-group-item">{{ j.username }}<br>{{ j.text }}<br>{{ j.time_create }}
+                            <form action="{% url 'shedm:comment_delete' pk2=proj_id pk=j.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="submit" class="btn-close" name="delete" value="">
+                            </form>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock main %}

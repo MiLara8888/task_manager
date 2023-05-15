@@ -1,0 +1,8 @@
+{% spaceless %}
+{% autoescape off %}
+{% block script_body %}
+
+
+{% endblock script_body %}
+{% endautoescape %}
+{% endspaceless %}

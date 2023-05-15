@@ -1,0 +1,99 @@
+{% extends 'shed/base.html' %}
+
+{% block main %}
+<div class="container-fluid">
+    <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="position-sticky pt-3">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a href="{% url 'shedm:all_user_task' %}" class="list-group-item list-group-item-action py-3 lh-tight">
+                        <div class="d-flex w-100 align-items-center justify-content-between">
+                            <strong class="mb-1">Все задачи</strong>
+                            <small class="text-muted"></small>
+                        </div>
+                    </a>
+                </li>
+                {% for i in project_list %}
+                <li class="nav-item">
+                    <a href="{% url 'shedm:all_user_project_task' pk=i.project_id %}" class="list-group-item list-group-item-action py-3 lh-tight">
+                        <div class="d-flex w-100 align-items-center justify-content-between">
+                            <p class="mb-1">{{ i.project_name }}</p>
+                            <small class="text-muted">{{ i.count_iwo }} в работе</small>
+                        </div>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </nav>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2"></h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                {% if proj_pk %}
+                <div class="btn-group me-2">
+                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'shedm:project_detail' pk=proj_pk %}" role="button">Информация о проекте</a>
+                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'shedm:add_all_task' pk=proj_pk %}" role="button">Добавить задачу</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="container">
+            <div class="row align-items-start">
+                <div class="col">
+                    Создана
+                    <hr>
+                    <div>
+                        {% for i in execution %}
+                        <br>
+                        <a href="{% url 'shedm:task_info' pk=i.task_id pk2=i.id %}" class="link-secondary">{{ i.task_name }}
+                        </a>{% include "shed/task/update_state.html" with pk=i.task_id pk2=i.id %}<br>
+                        {{ i.task_period }}<br><hr>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col">
+                    Задачи в работе
+                    <hr>
+                    <div>
+                        {% for i in inwork %}
+                        <br>
+                        <a href="{% url 'shedm:task_info' pk=i.task_id pk2=i.id %}" class="link-secondary">{{ i.task_name }}
+                        </a>{% include "shed/task/update_state.html" with pk=i.task_id pk2=i.id %}<br>
+                        {{ i.task_period }}<br><hr>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col">
+                    Закончена
+                    <hr>
+                    <div>
+                        {% for i in finished %}
+                        <br>
+                        <a href="{% url 'shedm:task_info' pk=i.task_id pk2=i.id %}" class="link-secondary">{{ i.task_name }}
+                        </a>{% include "shed/task/update_state.html" with pk=i.task_id pk2=i.id %}<br>
+                        {{ i.task_period }}<br><hr>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col">
+                    Заморожена
+                    <hr>
+                    <div>
+                        {% for i in frozen %}
+                        <br>
+                        <a href="{% url 'shedm:task_info' pk=i.task_id pk2=i.id %}" class="link-secondary">{{ i.task_name }}
+                        </a>{% include "shed/task/update_state.html" with pk=i.task_id pk2=i.id %}<br>
+                        {{ i.task_period }}<br><hr>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    </div>
+</div>
+
+{% endblock main %}

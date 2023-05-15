@@ -1,0 +1,40 @@
+{% extends 'shed/base.html' %}
+
+{% block main %}
+
+<form action="{% url 'shedm:add_task' pk=proj_pk %}" method="post">
+    {% csrf_token %}
+    <div class='form-error'>{{ form.non_field_errors }}</div>
+    {% for f in form %}
+    <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}: </label>{{ f }}</p>
+    <div class="form-error">{{ f.errors }}</div>
+    {% endfor %}
+    <input type="submit" value="Сохранить">
+</form>
+
+
+
+
+{% comment %} <form  action="{% url 'shedm:add_task' %}" method="post" >
+
+    <span class="heading">АВТОРИЗАЦИЯ</span>
+
+    {% csrf_token %}
+
+    <div class='form-error'>{{ form.non_field_errors }}</div>
+
+    <p><label for="{{ id_username }}">Логин: </label>
+        <input id="id_username" class="form_input" type="text" name="username" maxlengh="150" required="">
+    </p>
+
+    <p><label for="{{ id_password }}">Пароль: </label>
+        <input id="id_password" class="form_input" type="password" name="password" required="">
+    </p>
+
+    <button type='submit'>Войти</button>
+
+</form> {% endcomment %}
+
+
+
+{% endblock main %}

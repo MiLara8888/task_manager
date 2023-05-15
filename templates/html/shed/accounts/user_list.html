@@ -1,0 +1,26 @@
+{% extends 'shed/base.html' %}
+
+{% block main %}
+
+<div class='container'>
+<div class="list-group">
+    {% for i in users %}
+    <a href="#" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ i.username }}</h5>
+            {% comment %} <small class="text-muted"></small> {% endcomment %}
+            {% if not i.is_superuser %}
+            <form action="{% url 'shedm:delete_user' pk=i.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" class="btn-close" name="delete" value="">
+            </form>
+            {% endif %}
+        </div>
+            <p class="mb-1">{{ i.first_name }}</p>
+            <small class="text-muted">{{ i.email }}</small>
+    </a>
+    {% endfor %}
+</div>
+</div>
+
+{% endblock main %}

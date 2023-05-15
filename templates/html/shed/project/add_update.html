@@ -1,0 +1,25 @@
+{% extends 'shed/base.html' %}
+
+{% block main %}
+
+<div class="container">
+    <form  method="post">
+        {% csrf_token %}
+        <div class='form-error'>{{ form.non_field_errors }}</div>
+        {% for f in form %}
+        <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}: </label>{{ f }}</p>
+        <div class="form-error">{{ f.errors }}</div>
+        {% endfor %}
+        <input type="submit" name = "update" value="Сохранить">
+        </form>
+        {% if delete %}
+        <br>
+        <form action="{% url 'shedm:project_delete' pk=object.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-outline-danger" name="delete" value="Удалить">
+        </form>
+        {% endif %}
+    </form>
+</div>
+
+{% endblock main %}

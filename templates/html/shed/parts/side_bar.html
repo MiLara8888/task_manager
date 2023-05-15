@@ -1,0 +1,30 @@
+
+{% load shed_tags %}
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+    <div class="position-sticky pt-3">
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a href="{% url 'shedm:task_user_list' %}" class="list-group-item list-group-item-action py-3 lh-tight">
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                    <strong class="mb-1">Все задачи</strong>
+                    <small class="text-muted"></small>
+                </div>
+                {% comment %} <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div> {% endcomment %}
+            </a>
+        </li>
+
+        {% for project in projects %}
+        <li class="nav-item">
+            <a href="{% url 'shedm:task_user_list' pk=project.id %}" class="list-group-item list-group-item-action py-3 lh-tight">
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                    <p class="mb-1">{{ project }}</p>
+                    <small class="text-muted">{{project.cnt}}</small>
+                </div>
+                {% comment %} <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div> {% endcomment %}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    </div>
+</nav>
+

@@ -1,0 +1,21 @@
+<div class="btn-group">
+    <form method='post' action="{% url 'shedm:task_state_update' pk2=pk2 pk=pk %}" >
+    {% comment %} <form method='post' > {% endcomment %}
+        {% csrf_token %}
+    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    </button>
+
+    <ul class="dropdown-menu">
+        <select class="form-select" id="id_state" name="state" aria-label="Default select example">
+            <option value="EXE">создана</option>
+            <option value="IWO">в работе</option>
+            <option value="FIN">закончена</option>
+            <option value="FRO">заморожена</option>
+        </select>
+        <li><hr class="dropdown-divider"></li>
+        <li><button type='submit'>Изменить</button></li>
+    </ul>
+    </form>
+</div>
+
+

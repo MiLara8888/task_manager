@@ -1,0 +1,16 @@
+{% extends 'sqlt/core/base.sqlt' %}
+{% block script_body %}
+    SELECT p.ID , p.NAME, t.id as task_id, t.NAME as task_name,
+            t.TIME_CREATE as task_time_create, t.COMPLETION_DATE,
+            t.STATE, t.D_END, t.D_START,
+            u.ID as user_id, u.USERNAME as user_username, count(*) OVER (PARTITION BY t.EXECUTOR_ID, t.STATE, p.id) as count
+    from SHEDM.SHED_PROJECT p
+    left join SHEDM.SHED_TASK t
+    on p.ID = t.PROJECT_ID
+    left join SHEDM.AUTH_USER u
+    on u.ID = t.EXECUTOR_ID
+    WHERE u.ID = %(user_id)s
+    {% if project_id %}
+        and p.ID = %(project_id)s
+    {% endif %}
+{% endblock script_body %}

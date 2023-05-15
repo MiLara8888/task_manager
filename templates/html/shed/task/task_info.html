@@ -1,0 +1,114 @@
+{% extends 'shed/base.html' %}
+
+{% block main %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-7 col-xs-12 main">
+            <h5>{{ task.name }}</h5>
+        <hr>
+        Исполнитель -
+        {{ task.username }}
+        <hr>
+        проект -
+        {{ task.proj_name }}
+        <hr>
+        {% if task.description %}
+        описание -
+        {{ task.description }}
+        <hr>
+        {% endif %}
+        {% if task.d_start %}
+        Начало выполнения - {{ task.d_start }}
+            {% if task.d_end %}
+            <br>
+            Конец выполнения - {{ task.d_end }}
+            <hr>
+            {% endif %}
+        {% endif %}
+        {% if task.completion_date %}
+        <h6>Срок окончания задачи</h6>
+        {{ task.completion_date }}
+        <hr>
+        {% endif %}
+        создана
+        {{ task.time_create }}
+        <hr>
+        <form action="{% url 'shedm:task_delete' pk=task.id pk2=task.proj_id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-outline-danger" name="delete" value="Удалить">
+        </form>
+        <br>
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'shedm:task_update' pk2=task.proj_id pk=task.id %}" role="button">Изменить</a>
+        <hr>
+        </div>
+
+        <div class="col-md-5 col-xs-12 main">
+
+                <h5>Комментарии</h5>
+                <div class="dropdown">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                        Написать комментарий
+                    </button>
+
+                    <form action="{% url 'shedm:add_task_comment' pk3=task.proj_id pk2=task.id %}" class="dropdown-menu p-4" method="post" >
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <div class='form-error'>{{ form.non_field_errors }}</div>
+                            <p>
+                                <label for="{{ text }}">Комментарий: </label>
+                                <input id="text" class="form_input" type="text" name="text" required="">
+                            </p>
+                        </div>
+                    <button type="submit" class="btn btn-outline-secondary">Опубликовать</button>
+                    </form>
+
+
+                </div>
+                <hr>
+                {% if comment %}
+                <ul class="list-group">
+                    {% for i in comment %}
+                    <li class="list-group-item list-group-item-warning">{{ i.autor_comment }}<br>{{ i.text_comment }}<br>{{ i.create_comment }}
+                        <form action="{% url 'shedm:task_comment_delete' pk3=task.project_id pk2=task.id pk=i.comment_id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" class="btn-close" name="delete" value="">
+                        </form>
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                            Ответить
+                        </button>
+
+                    <form action="{% url 'shedm:add_task_comment_bound' pk3=task.proj_id pk2=task.id pk=i.comment_id %}" class="dropdown-menu p-4" method="post" >
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <div class='form-error'>{{ form.non_field_errors }}</div>
+                            <p>
+                                <label for="{{ text }}">Комментарий: </label>
+                                <input id="text" class="form_input" type="text" name="text" required="">
+                            </p>
+                        </div>
+                        <button type="submit" class="btn btn-outline-secondary">Ответить</button>
+                    </form>
+                    </div>
+                    </li>
+                        {% for j in bount_comment %}
+                            {% if j.connect_comment == i.comment_id %}
+                                <li class="list-group-item">{{ j.autor_comment }}<br>{{ j.text_comment }}<br>{{ i.create_comment }}<br>
+                                    <form action="{% url 'shedm:task_comment_delete' pk3=j.project_id pk2=j.id pk=j.comment_id %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="submit" class="btn-close" name="delete" value="">
+                                    </form>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                {% endfor %}
+                </ul>
+                {% endif %}
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock main %}

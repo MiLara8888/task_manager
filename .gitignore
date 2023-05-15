@@ -1,0 +1,9 @@
+database/
+__pycache__/
+migrations/
+bin/
+include/
+lib64
+settings.py
+Pipfile
+Pipfile.lock
